@@ -1,4 +1,4 @@
-<%@page import="java.util.List"%>
+﻿<%@page import="java.util.List"%>
 <%@page import="EntityManager.RawMaterialEntity"%>
 <%@page import="EntityManager.SupplierEntity"%>
 
@@ -50,19 +50,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label>SKU</label>
-                                    <input class="form-control" required="true" type="text" name="SKU">
+                                    <input class="form-control" required="true" type="text" name="SKU" pattern="[R][M]([1-9]|[1-9][0-9]+)" title="Format: RM#. '#' represents integer > 0.">
                                 </div>
                                 <div class="form-group">
                                     <label>Length per item</label>
-                                    <input class="form-control" required="true" type="number" name="length">
+                                    <input class="form-control" required="true" type="number" min="1" step="1" name="length">
                                 </div>
                                 <div class="form-group">
                                     <label>Width per item</label>
-                                    <input class="form-control" required="true" type="number" name="width">
+                                    <input class="form-control" required="true" type="number" min="1" step="1" name="width">
                                 </div>
                                 <div class="form-group">
                                     <label>Height per item</label>
-                                    <input class="form-control" required="true" type="number" name="height">
+                                    <input class="form-control" required="true" type="number" min="1" step="1" name="height">
                                 </div>
                                 <div class="form-group">
                                     <input type="submit" value="Add" class="btn btn-lg btn-primary btn-block">

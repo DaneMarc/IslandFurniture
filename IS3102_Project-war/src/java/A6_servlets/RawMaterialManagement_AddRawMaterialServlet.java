@@ -3,6 +3,8 @@ package A6_servlets;
 import CorporateManagement.ItemManagement.ItemManagementBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +30,28 @@ public class RawMaterialManagement_AddRawMaterialServlet extends HttpServlet {
             Integer height = Integer.parseInt(request.getParameter("height"));
             String source = request.getParameter("source");
             System.out.println("source is " + source);
+            Pattern p = Pattern.compile("[R][M]\\d+");
+            Matcher matcher = p.matcher(SKU);
+            Boolean error = false;
+            
+            if (_length <= 1){
+                result =  "?errMsg=Failed to add raw material (length has to positive)";
+                error = true;
+            }
+            else if (width <= 1){
+                result =  "?errMsg=Failed to add raw material (width has to positive)";
+                error = true;
+            }
+            else if (height <= 1){
+                result =  "?errMsg=Failed to add raw material (height has to positive)";
+                error = true;
+            }
+            else if (!(matcher.matches())){
+                error = true;
+                result =  "?errMsg=Failed to add raw material, wrong SKU format";
+            }
+            if(error)
+                response.sendRedirect(source + result);
             
             if (!itemManagementBean.checkSKUExists(SKU)) {
                 itemManagementBean.addRawMaterial(SKU, name, category, description, _length, width, height);
@@ -83,4 +107,5 @@ public class RawMaterialManagement_AddRawMaterialServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
 }
