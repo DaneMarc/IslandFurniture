@@ -78,15 +78,15 @@
                                         <h4>Personal Information</h4>
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <input class="form-control" required="true" name="name" type="text" value="">
+                                            <input class="form-control" name="name" type="text" value="<%=member.getName()%>">
                                         </div>
                                         <div class="form-group">
-                                            <label>E-mail Address</label>
-                                            <input class="form-control" required="true" value="" disabled/>
+					    <label>E-mail Address</label>
+                                            <input class="form-control" required="true" value="<%=member.getEmail()%>" disabled/>
                                         </div>
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input class="form-control" required="true" type="text" name="phone" value="">
+                                            <input class="form-control" type="text" name="phone" value="<%=member.getPhone()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Country</label>
@@ -168,7 +168,7 @@
                                                     <option value="Estonia">Estonia</option>
                                                     <option value="Ethiopia">Ethiopia</option>
                                                     <option value="Falkland Islands">Falkland Islands</option>
-                                                    <option value="Faroe Islands">Faroe Islands</option>
+					            <option value="Faroe Islands">Faroe Islands</option>
                                                     <option value="Fiji">Fiji</option>
                                                     <option value="Finland">Finland</option>
                                                     <option value="France">France</option>
@@ -254,7 +254,7 @@
                                                     <option value="New Caledonia">New Caledonia</option>
                                                     <option value="New Zealand">New Zealand</option>
                                                     <option value="Nicaragua">Nicaragua</option>
-                                                    <option value="Niger">Niger</option>
+					            <option value="Niger">Niger</option>
                                                     <option value="Nigeria">Nigeria</option>
                                                     <option value="Niue">Niue</option>
                                                     <option value="Norfolk Island">Norfolk Island</option>
@@ -295,7 +295,7 @@
                                                     <option value="Saudi Arabia">Saudi Arabia</option>
                                                     <option value="Senegal">Senegal</option>
                                                     <option value="Serbia">Serbia</option>
-                                                    <option value="Seychelles">Seychelles</option>
+						    <option value="Seychelles">Seychelles</option>
                                                     <option value="Sierra Leone">Sierra Leone</option>
                                                     <option value="Singapore">Singapore</option>
                                                     <option value="Slovakia">Slovakia</option>
@@ -348,7 +348,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <input class="form-control" type="text" required="true" name="address" value="">
+                                            <input class="form-control" type="text" required="true" name="address" value="<%=member.getAddress()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Set Challenge Question</label>
@@ -377,11 +377,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
-                                            <input class="form-control" name="age" step="1" type="number" min="1" max="150" value="">
+                                            <input class="form-control" name="age" step="1" type="number" min="1" max="150" value="<%=member.getAge()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Income per annum (in USD)</label>
-                                            <input class="form-control" name="income" step="1" type="number" min="0" max="2147483646" value="">
+                                            <input class="form-control" name="income" step="1" type="number" min="0" max="2147483646" value="<%=df.format(member.getIncome())%>">
                                         </div>
                                         <div class="form-group">
                                             <input type="checkbox" name="serviceLevelAgreement"> Allow us to use your particulars to serve you better?<br/>Checking the box above indicates that you agree to our <a onclick="pdpaWindow()">personal data protection policy.</a>
