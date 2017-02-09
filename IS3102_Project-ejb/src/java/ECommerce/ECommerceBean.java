@@ -5,6 +5,10 @@ import EntityManager.ItemEntity;
 import EntityManager.MemberEntity;
 import EntityManager.SubscriptionEntity;
 import EntityManager.WishListEntity;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.Properties;
 import javax.ejb.Stateless;
@@ -28,6 +32,25 @@ public class ECommerceBean implements ECommerceBeanLocal {
     String emailFromAddress = "a0105466@comp.nus.edu.sg";
     String toEmailAddress = "a0105466@comp.nus.edu.sg";
     String mailer = "JavaMailer";
+
+    @Override
+    public int getQuantity(Long countryID, String SKU) {
+        int qty = 0;
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/islandfurniture-it07?zeroDateTimeBehavior=convertToNull&user=root&password=12345");
+            String stmt = "SELECT sum(l.QUANTITY) as sum FROM storeentity s, warehouseentity w, storagebinentity sb, storagebinentity_lineitementity sbli, lineitementity l, itementity i where s.WAREHOUSE_ID=w.ID and w.ID=sb.WAREHOUSE_ID and sb.ID=sbli.StorageBinEntity_ID and sbli.lineItems_ID=l.ID and l.ITEM_ID=i.ID and s.COUNTRY_ID=? and i.SKU=?";
+            PreparedStatement ps = conn.prepareStatement(stmt);
+            ps.setLong(1, countryID);
+            ps.setString(2, SKU);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                qty = rs.getInt("sum");
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return qty;
+    }
 
     @Override
     public boolean addFeedback(String subject, String name, String email, String message) {
@@ -165,37 +188,37 @@ public class ECommerceBean implements ECommerceBeanLocal {
             Query q = em.createQuery("SELECT t FROM SubscriptionEntity t");
             for (Object o : q.getResultList()) {
                 SubscriptionEntity subscriber = (SubscriptionEntity) o;
-                    try {
-                        Properties props = new Properties();
-                        props.put("mail.transport.protocol", "smtp");
-                        props.put("mail.smtp.host", emailServerName);
-                        props.put("mail.smtp.port", "25");
-                        props.put("mail.smtp.auth", "true");
-                        props.put("mail.smtp.starttls.enable", "true");
-                        props.put("mail.smtp.debug", "true");
-                        javax.mail.Authenticator auth = new CommonInfrastructure.SystemSecurity.SMTPAuthenticator();
-                        Session session = Session.getInstance(props, auth);
-                        session.setDebug(true);
-                        Message msg = new MimeMessage(session);
-                        if (msg != null) {
-                            msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
-                            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(subscriber.getEmail(), false));
-                            msg.setSubject("Island Furniture Staff Monthly Newsletter");
-                            String messageText = "Greetings from Island Furniture... \n\n"
-                                    + "Here is your monthly newsletter :\n\n"
-                                    + "Promotion for this week is as follow"
-                                    + "Click here to unsubscribe: http://localhost:8080/IS3102_Project-war/ECommerce_UnsubscribeServlet?email=" + subscriber.getEmail();
-                            msg.setText(messageText);
-                            msg.setHeader("X-Mailer", mailer);
-                            Date timeStamp = new Date();
-                            msg.setSentDate(timeStamp);
-                            Transport.send(msg);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return false;
+                try {
+                    Properties props = new Properties();
+                    props.put("mail.transport.protocol", "smtp");
+                    props.put("mail.smtp.host", emailServerName);
+                    props.put("mail.smtp.port", "25");
+                    props.put("mail.smtp.auth", "true");
+                    props.put("mail.smtp.starttls.enable", "true");
+                    props.put("mail.smtp.debug", "true");
+                    javax.mail.Authenticator auth = new CommonInfrastructure.SystemSecurity.SMTPAuthenticator();
+                    Session session = Session.getInstance(props, auth);
+                    session.setDebug(true);
+                    Message msg = new MimeMessage(session);
+                    if (msg != null) {
+                        msg.setFrom(InternetAddress.parse(emailFromAddress, false)[0]);
+                        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(subscriber.getEmail(), false));
+                        msg.setSubject("Island Furniture Staff Monthly Newsletter");
+                        String messageText = "Greetings from Island Furniture... \n\n"
+                                + "Here is your monthly newsletter :\n\n"
+                                + "Promotion for this week is as follow"
+                                + "Click here to unsubscribe: http://localhost:8080/IS3102_Project-war/ECommerce_UnsubscribeServlet?email=" + subscriber.getEmail();
+                        msg.setText(messageText);
+                        msg.setHeader("X-Mailer", mailer);
+                        Date timeStamp = new Date();
+                        msg.setSentDate(timeStamp);
+                        Transport.send(msg);
                     }
-                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
             }
         } catch (Exception ex) {
             System.out.println("\nServer failed to send monthly code :\n" + ex);
@@ -209,11 +232,11 @@ public class ECommerceBean implements ECommerceBeanLocal {
         Query q = em.createQuery("SELECT t FROM SubscriptionEntity t");
         for (Object o : q.getResultList()) {
             SubscriptionEntity subscriber = (SubscriptionEntity) o;
-                if (subscriber.getEmail().equalsIgnoreCase(email)) {
-                    em.remove(subscriber);
-                    em.flush();
-                    return true;
-                }
+            if (subscriber.getEmail().equalsIgnoreCase(email)) {
+                em.remove(subscriber);
+                em.flush();
+                return true;
+            }
         }
         return false;
     }

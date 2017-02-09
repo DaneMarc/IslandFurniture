@@ -65,7 +65,7 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
                     //shoppingCart = (ArrayList<ShoppingCartLineItem>)session.getAttribute("shoppingCart");
                     ShoppingCartLineItem item = new ShoppingCartLineItem();
                     item.setCountryID(countryID);
-                    item.setId(request.getParameter("id"));
+                    item.setId(Long.parseLong(request.getParameter("id")));
                     item.setImageURL(request.getParameter("imageURL"));
                     item.setName(request.getParameter("name"));
                     item.setPrice(Double.parseDouble(request.getParameter("price")));

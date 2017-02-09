@@ -47,7 +47,7 @@ public class ECommerce_FurnitureCategoryServlet extends HttpServlet {
     public List<Furniture> retrieveFurnitureByCategoryRESTful(Long countryID, String category) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.furnitureentity").path("getFurnitureListByCategory")
+                .target("http://localhost:8080/WebServices-Student/webresources/entity.furnitureentity").path("getFurnitureListByCategory")
                 .queryParam("countryID", countryID)
                 .queryParam("category", category);
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);

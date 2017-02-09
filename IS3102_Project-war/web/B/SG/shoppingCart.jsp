@@ -15,10 +15,6 @@
             double finalPrice = 0.0;
         %>
         <script>
-            var totalPrice = 0;
-            for (var i = 0, n = shoppingCart.getItems().size; i < n; i++) {
-                totalPrice += shoppingCart.getItems().get(i).get
-            }
             function removeItem() {
                 checkboxes = document.getElementsByName('delete');
                 var numOfTicks = 0;
@@ -158,6 +154,7 @@
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="totalPrice<%=item.getSKU()%>">
                                                                     <%=item.getPrice() * item.getQuantity()%>
+                                                                    <%finalPrice +=  item.getPrice() * item.getQuantity();%>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -173,11 +170,11 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td class="product-subtotal" style="font-weight: bold">
-                                                                Total: 
+                                                                Total:
                                                             </td>
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="finalPrice" name="finalPrice">
-                                                                    
+                                                                    <%=finalPrice%>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -245,7 +242,7 @@
                                                                     <option>November</option>
                                                                     <option>December</option>
                                                                 </select>
-                                                                <input type="text" style="width: 60px" class="input-text text" title="year" id="year" required>(eg: 2015)                                                        
+                                                                <input type="text" style="width: 60px" class="input-text text" title="year" id="year" required>(eg: 2015)
                                                             </td>
                                                         </tr>
                                                         <tr>
