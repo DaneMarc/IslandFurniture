@@ -50,7 +50,7 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
         member.setIncome(Integer.parseInt(request.getParameter("income")));
         
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity")
+                .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity")
                 .path("editMember");
                 
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);

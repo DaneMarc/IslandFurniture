@@ -62,7 +62,7 @@ public class ECommerce_MemberLoginServlet extends HttpServlet {
     public String loginMember(String email, String password) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("login")
+                .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity").path("login")
                 .queryParam("email", email)
                 .queryParam("password", password);
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);

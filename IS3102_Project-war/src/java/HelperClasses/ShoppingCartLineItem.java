@@ -1,7 +1,7 @@
 package HelperClasses;
 //###
 public class ShoppingCartLineItem{
-    private String id;
+    private long id;
     private String SKU;
     private String name;
     private String imageURL;
@@ -10,7 +10,7 @@ public class ShoppingCartLineItem{
     private long countryID;
 
     public ShoppingCartLineItem() {
-        this.id="";
+        this.id= 0;
         this.SKU = "";
         this.name = "";
         this.imageURL = "";
@@ -19,11 +19,11 @@ public class ShoppingCartLineItem{
         this.countryID = 0;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
