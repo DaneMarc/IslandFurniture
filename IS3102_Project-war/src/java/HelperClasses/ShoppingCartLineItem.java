@@ -10,7 +10,7 @@ public class ShoppingCartLineItem{
     private long countryID;
 
     public ShoppingCartLineItem() {
-        this.id= 0;
+        this.id=0;
         this.SKU = "";
         this.name = "";
         this.imageURL = "";
