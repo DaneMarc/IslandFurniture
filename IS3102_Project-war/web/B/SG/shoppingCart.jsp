@@ -7,8 +7,7 @@
 <%@page import="EntityManager.RetailProductEntity"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="checkCountry.jsp" />
-<!--###-->
-<html> <!--<![endif]-->
+<html> 
     <jsp:include page="header.html" />
     <body>
         <%
@@ -204,7 +203,7 @@
                                                                 <label>Name on Card: </label>
                                                             </td>
                                                             <td style="padding: 5px">
-                                                                <input type="text" class="input-text text" title="name"id="txtName" required>                                                            
+                                                                <input type="text" class="input-text text" title="name"id="txtName" pattern="[a-zA-Z-]+" required>                                                            
                                                             </td>
                                                         </tr>
                                                         <tr>

@@ -30,34 +30,42 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             HttpSession session = request.getSession();
             String SKU = request.getParameter("SKU");
             boolean contains = false;
-            int id = 0;
-
-            for (int i = 0; i < shoppingCart.size(); i++) {
-                if (shoppingCart.get(i).getSKU().equals(SKU)) {
-                    contains = true;
-                    id = i;
-                }
-            }
-
-            if (contains) {
-                shoppingCart.get(id).setQuantity(shoppingCart.get(id).getQuantity() + 1);
-                session.setAttribute("shoppingCart", shoppingCart);
-                result = "Item successfully added into the cart!";
-                response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
-            } else {
-                String countryIDstring = request.getParameter("countryID");
-                //<editor-fold defaultstate="collapsed" desc="check countryID and SKU validity">
+            Long countryID = null;
+            int itemId = 0;
+            String countryIDstring = session.getAttribute("countryID").toString();
+            //<editor-fold defaultstate="collapsed" desc="check countryID and SKU validity">
             if ((countryIDstring == null || countryIDstring.equals("")) && (SKU == null || SKU.equals(""))) {
                 response.sendRedirect("/IS3102_Project-war/B/SG/index.jsp");
             } else if (countryIDstring == null || countryIDstring.equals("")) {
                 response.sendRedirect("/IS3102_Project-war/B/SG/furnitureProductDetails.jsp?sku=" + SKU);
             }
             //</editor-fold>
-                Long countryID = Long.parseLong(countryIDstring);
-                int itemQty = getQuantity(countryID, SKU);
+            countryID = Long.parseLong(countryIDstring);
+            int itemQty = getQuantity(countryID, SKU);
+            
+            for (int i = 0; i < shoppingCart.size(); i++) {
+                if (shoppingCart.get(i).getSKU().equals(SKU)) {
+                    contains = true;
+                    itemId = i;
+                }
+            }
 
+            if (contains) {
+                if (shoppingCart.get(itemId).getQuantity() < itemQty){
+                    System.out.println("here1");
+                    shoppingCart.get(itemId).setQuantity(shoppingCart.get(itemId).getQuantity() + 1);
+                    session.setAttribute("shoppingCart", shoppingCart);
+                    result = "Item successfully added into the cart!";
+                    response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
+                }
+                else {
+                    System.out.println("here2");
+                    result = "Item not added to cart, not enough quantity available";
+                    response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
+                }
+            }
+            else {
                 if (itemQty != 0) {
-                    //shoppingCart = (ArrayList<ShoppingCartLineItem>)session.getAttribute("shoppingCart");
                     ShoppingCartLineItem item = new ShoppingCartLineItem();
                     item.setCountryID(countryID);
                     item.setId(Long.parseLong(request.getParameter("id")));
@@ -71,7 +79,8 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
                     session.setAttribute("shoppingCart", shoppingCart);
                     result = "Item successfully added into the cart!";
                     response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
-                } else {
+                }
+                else {
                     result = "Item not added to cart, not enough quantity available";
                     response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
                 }
@@ -81,7 +90,7 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
 
     public int getQuantity(Long countryID, String SKU) {
         try {
-            System.out.println("getQuantity() SKU: " + SKU);
+            System.out.println("getQuantity() SKU: " + SKU + ", countryID: " + countryID);
             Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/WebServices-Student/webresources/entity.countryentity")

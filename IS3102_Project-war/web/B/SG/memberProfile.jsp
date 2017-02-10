@@ -94,7 +94,7 @@
                                             <select name="country" class="bfh-countries">
                                                 <option value="<%=member.getCity()%>"><%=member.getCity()%></option>
                                                 <%} else {%>
-                                                <select name="country" class="bfh-countries" data-country="SG" disabled>
+                                                <select name="country" class="bfh-countries" data-country="SG">
                                                     <%}%>
                                                 </select>
                                         </div>
