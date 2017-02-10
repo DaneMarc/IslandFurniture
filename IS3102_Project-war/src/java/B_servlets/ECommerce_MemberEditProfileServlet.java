@@ -1,11 +1,8 @@
 package B_servlets;
 
-import CommonInfrastructure.AccountManagement.AccountManagementBeanLocal;
-import CommonInfrastructure.SystemSecurity.SystemSecurityBeanLocal;
 import HelperClasses.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,14 +19,6 @@ import javax.ws.rs.core.Response;
 
 @WebServlet(name = "ECommerce_MemberEditProfileServlet", urlPatterns = {"/ECommerce_MemberEditProfileServlet"})
 public class ECommerce_MemberEditProfileServlet extends HttpServlet {
-
-    @EJB
-    private AccountManagementBeanLocal accountManagementBean;
-    private String result;
-
-    @EJB
-    private SystemSecurityBeanLocal systemSecurityBean;
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -51,7 +40,9 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
         
         WebTarget target = client
                 .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity")
-                .path("editMember");
+                .path("editMember")
+                .queryParam("email", request.getParameter("email"))
+                .queryParam("password", request.getParameter("password"));
                 
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
         Response res = invocationBuilder.put(Entity.entity(member, MediaType.APPLICATION_JSON));
@@ -61,7 +52,6 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
         
         response.sendRedirect("ECommerce_GetMember");
     }
-        //test
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
