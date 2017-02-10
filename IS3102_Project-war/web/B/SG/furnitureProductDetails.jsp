@@ -80,6 +80,7 @@
                                         if (isMemberLoggedIn == true) {
                                     %>
                                     <form action="../../ECommerce_AddFurnitureToListServlet">
+                                        <input type="hidden" name="countryID" value="<%=session.getAttribute("countryID")%>"/>
                                         <input type="hidden" name="id" value="<%=id%>"/>
                                         <input type="hidden" name="SKU" value="<%=sku%>"/>
                                         <input type="hidden" name="price" value="<%=price%>"/>

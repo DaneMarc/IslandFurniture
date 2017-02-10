@@ -15,10 +15,6 @@
             double finalPrice = 0.0;
         %>
         <script>
-            var totalPrice = 0;
-            for (var i = 0, n = shoppingCart.getItems().size; i < n; i++) {
-                totalPrice += shoppingCart.getItems().get(i).get
-            }
             function removeItem() {
                 checkboxes = document.getElementsByName('delete');
                 var numOfTicks = 0;
@@ -127,41 +123,42 @@
                                                         <%ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
                                                             try {
                                                                 if (shoppingCart != null && shoppingCart.size() > 0) {
-                                                                    //for (ShoppingCartLineItem item : shoppingCart) {
+                                                                    for (ShoppingCartLineItem item : shoppingCart) {
                                                         %>
                                                         <tr class="cart_table_item">
                                                             <td class="product-remove">
-                                                                <input type="checkbox" name="delete" value="" />
+                                                                <input type="checkbox" name="delete" value="<%=item.getSKU()%>" />
                                                             </td>
                                                             <td class="product-thumbnail">
-                                                                <a href="furnitureProductDetails.jsp">
-                                                                    <img width="100" height="100" alt="" class="img-responsive" src="../../..<%=ImageURL()%>">
+                                                                <a href="furnitureProductDetails.jsp?sku=<%=item.getSKU()%>">
+                                                                    <img width="100" height="100" alt="" class="img-responsive" src="../../..<%=item.getImageURL()%>">
                                                                 </a>
                                                             </td>
                                                             <td class="product-name">
-                                                                <a class="productDetails" href="furnitureProductDetails.jsp">Insert product name</a>
+                                                                <a class="productDetails" href="furnitureProductDetails.jsp?sku=<%=item.getSKU()%>"><%=item.getName()%></a>
                                                             </td>
                                                             <td class="product-price">
-                                                                $<span class="amount" id="price<%=SKU()%>">
-                                                                    insert price here
+                                                                $<span class="amount" id="price<%=item.getSKU()%>">
+                                                                    <%=item.getPrice()%>
                                                                 </span>
                                                             </td>
                                                             <td class="product-quantity">
                                                                 <form enctype="multipart/form-data" method="post" class="cart">
                                                                     <div class="quantity">
-                                                                        <input type="button" class="minus" value="-" onclick="minus('<%=SKU()%>')">
-                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="" name="quantity" min="1" step="1" id="<%=SKU()%>">
-                                                                        <input type="button" class="plus" value="+" onclick="plus('<%=SKU()%>', '<%=Name()%>',<%=Price()%>, '<%=ImageURL()%>')">
+                                                                        <input type="button" class="minus" value="-" onclick="minus('<%=item.getSKU()%>')">
+                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="<%=item.getQuantity()%>" name="quantity" min="1" step="1" id="<%=item.getSKU()%>">
+                                                                        <input type="button" class="plus" value="+" onclick="plus('<%=item.getSKU()%>', '<%=item.getName()%>',<%=item.getPrice()%>, '<%=item.getImageURL()%>')">
                                                                     </div>
                                                                 </form>
                                                             </td>
                                                             <td class="product-subtotal">
-                                                                $<span class="amount" id="totalPrice<%=SKU()%>">
-                                                                    insert total price here
+                                                                $<span class="amount" id="totalPrice<%=item.getSKU()%>">
+                                                                    <%=item.getPrice() * item.getQuantity()%>
+                                                                    <%finalPrice += item.getPrice() * item.getQuantity();%>
                                                                 </span>
                                                             </td>
                                                         </tr>
-                                                        <%                                                                 //   }
+                                                        <%      }                                                           //   }
                                                                 }
                                                             } catch (Exception ex) {
                                                                 System.out.println(ex);
@@ -173,11 +170,11 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td class="product-subtotal" style="font-weight: bold">
-                                                                Total: 
+                                                                Total:
                                                             </td>
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="finalPrice" name="finalPrice">
-                                                                    
+                                                                    <%=finalPrice%>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -200,6 +197,7 @@
                                                         <tbody>
                                                             <tr>
                                                         <h4 style="text-align: left">Credit Card Payment Details</h4>
+                                                        <div class="payment-errors"></div>
                                                         </tr>
                                                         <tr>
                                                             <td style="padding: 5px">
@@ -231,28 +229,28 @@
                                                                 <label>Expiry Date: </label>
                                                             </td>
                                                             <td style="width: 300px">
-                                                                <select style="width: 120px; display: inline-block" class="dropdown-header" title="Month">
-                                                                    <option>January</option>
-                                                                    <option>February</option>
-                                                                    <option>March</option>
-                                                                    <option>April</option>
-                                                                    <option>May</option>
-                                                                    <option>June</option>
-                                                                    <option>July</option>
-                                                                    <option>August</option>
-                                                                    <option>September</option>
-                                                                    <option>October</option>
-                                                                    <option>November</option>
-                                                                    <option>December</option>
+                                                                <select style="width: 120px; display: inline-block" class="dropdown-header" title="Month" id="month">
+                                                                    <option value="1">January</option>
+                                                                    <option value="2">February</option>
+                                                                    <option value="3">March</option>
+                                                                    <option value="4">April</option>
+                                                                    <option value="5">May</option>
+                                                                    <option value="6">June</option>
+                                                                    <option value="7">July</option>
+                                                                    <option value="8">August</option>
+                                                                    <option value="9">September</option>
+                                                                    <option value="10">October</option>
+                                                                    <option value="11">November</option>
+                                                                    <option value="12">December</option>
                                                                 </select>
-                                                                <input type="text" style="width: 60px" class="input-text text" title="year" id="year" required>(eg: 2015)                                                        
+                                                                <input type="text" style="width: 60px" class="input-text text" title="year" id="year" required>(eg: 2015)
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td style="">
                                                             </td>
                                                             <td style="padding-top: 20px">
-                                                                <div align="right"><a href="#makePaymentModal" data-toggle="modal"><button class="btn btn-primary">Make Payment</button></a></div>
+                                                                <div align="right"><a href="#makePaymentModal" data-toggle="modal"><button class="btn btn-primary" id="submitPayment">Make Payment</button></a></div>
                                                             </td>
                                                         </tr>
                                                         </tbody></table>
@@ -311,7 +309,7 @@
                             <p id="messageBox">You are making payment now. Are you sure you want to continue?</p>
                         </div>
                         <div class="modal-footer">                        
-                            <input class="btn btn-primary" name="btnPayment" type="submit" value="Confirm" onclick="makePayment()"  />
+                            <input class="btn btn-primary" name="btnPayment" type="submit" value="Confirm" onclick="validateCreditCard()"  />
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
                         </div>
                     </div>
@@ -328,7 +326,32 @@
             <script src="../../vendor/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
             <script src="../../vendor/rs-plugin/js/jquery.themepunch.revolution.js"></script>
             <script src="../../vendor/circle-flip-slideshow/js/jquery.flipshow.js"></script>
-            <script src="../../js/views/view.home.js"></script>   
+            <script src="../../js/views/view.home.js"></script>
+            <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+            <script>Stripe.setPublishableKey('pk_test_lDBR5zoHiQg5voO1WjiXzWVA');</script>
+            <script>
+            function validateCreditCard(){
+                Stripe.card.createToken({
+                    number: $('#txtCardNo').val(),
+                    cvc: $('#txtSecuritycode').val(),
+                    exp_month: $('#month').val(),
+                    exp_year: $('#year').val()
+                }, stripeResponseHandler);
+            }
+
+            function stripeResponseHandler(status, response) {
+                var $form = $('#makePaymentForm');
+
+                if (response.error) {
+                    $form.find('.payment-errors').text(response.error.message).addClass('alert alert-danger');
+                    $('#makePaymentModal').modal('hide');
+                } else {
+                    var token = response.id;
+                    $form.append($('<input type="hidden" name="stripeToken">').val(token));
+                    makePayment();
+                }
+            };
+            </script>
         </div>
     </body>
 </html>

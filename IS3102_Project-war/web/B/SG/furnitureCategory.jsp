@@ -71,6 +71,7 @@
                                                 if (isMemberLoggedIn == true) {
                                             %>
                                             <form action="../../ECommerce_AddFurnitureToListServlet">
+                                                <input type="hidden" name="countryID" value="<%=session.getAttribute("countryID")%>"/>
                                                 <input type="hidden" name="id" value="<%=furnitures.get(i).getId()%>"/>
                                                 <input type="hidden" name="SKU" value="<%=furnitures.get(i).getSKU()%>"/>
                                                 <input type="hidden" name="price" value="<%=furnitures.get(i).getPrice()%>"/>

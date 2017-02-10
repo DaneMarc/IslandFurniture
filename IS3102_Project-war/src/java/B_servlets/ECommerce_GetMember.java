@@ -1,4 +1,3 @@
-
 package B_servlets;
 
 import HelperClasses.Member;
@@ -18,22 +17,9 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- *
- * @author user
- */
 @WebServlet(name = "ECommerce_GetMember", urlPatterns = {"/ECommerce_GetMember"})
 public class ECommerce_GetMember extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,8 +27,7 @@ public class ECommerce_GetMember extends HttpServlet {
 
             HttpSession session = request.getSession();
             String memberEmail = session.getAttribute("memberEmail").toString();
-            //out.println(memberEmail);
-            //if(session.getAttribute("memberName") == null){
+
             Client myClient = ClientBuilder.newClient();
             WebTarget myTarget = myClient
                     .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity")
@@ -54,7 +39,6 @@ public class ECommerce_GetMember extends HttpServlet {
             Member member = (Member) res.readEntity(Member.class);
 
             if (res.getStatus() == 200) {
-//                session.setAttribute("member", member);
                 if (session.getAttribute("memberName") != null) {
                     if (!(session.getAttribute("memberName").equals(member.getName()))) {
                         session.setAttribute("member", member);
@@ -74,20 +58,6 @@ public class ECommerce_GetMember extends HttpServlet {
 
                     }
             }
-
-//            }else{
-//                response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
-//            }
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet ECommerce_GetMember</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet ECommerce_GetMember at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
         }
     }
 
