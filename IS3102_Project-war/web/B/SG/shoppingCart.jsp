@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="HelperClasses.ShoppingCartLineItem"%>
 <%@page import="EntityManager.WishListEntity"%>
@@ -12,6 +13,7 @@
     <body>
         <%
             double finalPrice = 0.0;
+            DecimalFormat df = new DecimalFormat("#.##");
         %>
         <script>
             function removeItem() {
@@ -138,7 +140,7 @@
                                                             </td>
                                                             <td class="product-price">
                                                                 $<span class="amount" id="price<%=item.getSKU()%>">
-                                                                    <%=item.getPrice()%>
+                                                                    <%=df.format(item.getPrice())%>
                                                                 </span>
                                                             </td>
                                                             <td class="product-quantity">
@@ -152,7 +154,7 @@
                                                             </td>
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="totalPrice<%=item.getSKU()%>">
-                                                                    <%=item.getPrice() * item.getQuantity()%>
+                                                                    <%=df.format(item.getPrice() * item.getQuantity())%>
                                                                     <%finalPrice += item.getPrice() * item.getQuantity();%>
                                                                 </span>
                                                             </td>
@@ -173,7 +175,7 @@
                                                             </td>
                                                             <td class="product-subtotal">
                                                                 $<span class="amount" id="finalPrice" name="finalPrice">
-                                                                    <%=finalPrice%>
+                                                                    <%=df.format(finalPrice)%>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -347,6 +349,7 @@
                 } else {
                     var token = response.id;
                     $form.append($('<input type="hidden" name="stripeToken">').val(token));
+                    $form.append($('<input type="hidden" name="finalPrice">').val(finalPrice))
                     makePayment();
                 }
             };
