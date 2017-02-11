@@ -349,7 +349,7 @@
                 } else {
                     var token = response.id;
                     $form.append($('<input type="hidden" name="stripeToken">').val(token));
-                    $form.append($('<input type="hidden" name="finalPrice">').val(finalPrice))
+                    $form.append($('<input type="hidden" name="finalPrice">').val(<%=finalPrice%>))
                     makePayment();
                 }
             };
