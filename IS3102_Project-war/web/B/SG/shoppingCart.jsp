@@ -13,7 +13,7 @@
     <body>
         <%
             double finalPrice = 0.0;
-            DecimalFormat df = new DecimalFormat("#.##");
+            DecimalFormat df = new DecimalFormat("#.00");
         %>
         <script>
             function removeItem() {
@@ -345,10 +345,17 @@
                 if (response.error) {
                     $form.find('.payment-errors').text(response.error.message).addClass('alert alert-danger');
                     $('#makePaymentModal').modal('hide');
-                } else {
+                }
+                else if (response.card.brand !== "Visa" && response.card.brand !== "MasterCard"){
+                    message = "Sorry, we do not accept " + response.card.brand + " cards. Only Visa and MasterCard cards are accepted."
+                    $form.find('.payment-errors').text(message).addClass('alert alert-danger');
+                    $('#makePaymentModal').modal('hide');
+                }
+                else {
                     var token = response.id;
+                    console.dir(response.card.brand);
                     $form.append($('<input type="hidden" name="stripeToken">').val(token));
-                    $form.append($('<input type="hidden" name="finalPrice">').val(finalPrice))
+                    $form.append($('<input type="hidden" name="finalPrice">').val(<%=finalPrice%>))
                     makePayment();
                 }
             };
