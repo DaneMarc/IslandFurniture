@@ -48,28 +48,14 @@ public class ECommerce_PaymentServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session;
             session = request.getSession();
-            //--------------------------Session Data-----------------------------------
-//            Member member = new Member();
-//            member = (Member) session.getAttribute("member");
-//            ArrayList<ShoppingCartLineItem> shoppingcart = (ArrayList<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
-//            long mid = member.getId();
-//            double paid = 10.0;
-//            long cid = Long.parseLong(session.getAttribute("countryID").toString());
-            //--------------------------End of Session Data-----------------------------------
-
-//            ---------------------------Test Data------------------------------------
-            ArrayList<ShoppingCartLineItem> shoppingcart = new ArrayList<>();
-            ShoppingCartLineItem s = new ShoppingCartLineItem();
-            s.setId(71);
-            s.setQuantity(10);
-            s.setCountryID(25);
-            s.setSKU("F_TD_02");
-            shoppingcart.add(s);
-
-            long mid = 8351;
+            Member member = new Member();
+            member = (Member) session.getAttribute("member");
+            ArrayList<ShoppingCartLineItem> shoppingcart = (ArrayList<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
+            long mid = member.getId();
             double paid = 10.0;
-            long cid = 25;
-//            ---------------------------End of Test Data------------------------------------
+            long cid = Long.parseLong(session.getAttribute("countryID").toString());
+
+
 
             SaleRecord sr = new SaleRecord(mid, paid, cid);
             Client client = ClientBuilder.newClient();
