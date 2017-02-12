@@ -13,7 +13,7 @@
     <body>
         <%
             double finalPrice = 0.0;
-            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormat df = new DecimalFormat("#.00");
         %>
         <script>
             function removeItem() {
