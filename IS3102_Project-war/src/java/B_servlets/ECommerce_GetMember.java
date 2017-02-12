@@ -35,25 +35,23 @@ public class ECommerce_GetMember extends HttpServlet {
                     .queryParam("email", memberEmail);
             Invocation.Builder invocationBuilder = myTarget.request(MediaType.APPLICATION_JSON);
             Response res = invocationBuilder.get();
-
             Member member = (Member) res.readEntity(Member.class);
+            session.setAttribute("member", member);
 
             if (res.getStatus() == 200) {
                 if (session.getAttribute("memberName") != null) {
-                    if (session.getAttribute("member") != null) {
-                        session.setAttribute("member", member);
+                    if (session.getAttribute("updated") != null) {
                         session.removeAttribute("memberName");
                         session.setAttribute("memberName", member.getName());
+                        session.removeAttribute("updated");
                         String resultString = "Account updated successfully";
                         response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp?goodMsg=" + resultString);
                     } else {
-                        session.setAttribute("member", member);
                         response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
                     }
                 } else {
                     session.setAttribute("memberName", member.getName());
                     response.sendRedirect("/IS3102_Project-war/B/SG/index.jsp");
-
                 }
             }
         }
