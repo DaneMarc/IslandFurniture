@@ -16,7 +16,6 @@
                 var ok = true;
                 if ((password != null && repassword != null) || (password != "" && repassword != "")) {
                     if (password != repassword) {
-                        //alert("Passwords Do not match");
                         document.getElementById("password").style.borderColor = "#E34234";
                         document.getElementById("repassword").style.borderColor = "#E34234";
                         alert("Passwords do not match. Please key again.");
@@ -74,11 +73,11 @@
                             <div class="tab-content">
                                 <div id="overview" class="tab-pane active">
                                     <%if (member != null) {%>
-                                    <form role="form" action="../../ECommerce_MemberEditProfileServlet" onsubmit="return validatePassword()">
+                                    <form id="form" role="form" action="../../ECommerce_MemberEditProfileServlet" onsubmit="return validatePassword()">
                                         <h4>Personal Information</h4>
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <input class="form-control" name="name" type="text" value="<%=member.getName()%>">
+                                            <input class="form-control" id="name" name="name" type="text" value="<%=member.getName()%>">
                                         </div>
                                         <div class="form-group">
 					    <label>E-mail Address</label>
@@ -86,7 +85,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input class="form-control" type="text" name="phone" value="<%=member.getPhone()%>">
+                                            <input class="form-control" type="number" name="phone" value="<%=member.getPhone()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Country</label>
@@ -100,7 +99,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>
-                                            <input class="form-control" type="text" required="true" name="address" value="<%=member.getAddress()%>">
+                                            <input class="form-control" type="text" name="address" value="<%=member.getAddress()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Set Challenge Question</label>
@@ -121,7 +120,7 @@
                                                         out.println("selected");
                                                     }%>>What is your favourite animal?</option>
                                             </select>
-                                            <input class="form-control" type="text" required="true" name="securityAnswer" value="<%if (member.getSecurityAnswer() == null) {
+                                            <input class="form-control" type="text" name="securityAnswer" value="<%if (member.getSecurityAnswer() == null) {
                                                     out.println("");
                                                 } else {
                                                     out.println(member.getSecurityAnswer());
@@ -129,11 +128,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
-                                            <input class="form-control" name="age" step="1" type="number" min="1" max="150" value="<%=member.getAge()%>">
+                                            <input class="form-control" name="age" step="1" type="number" value="<%=member.getAge()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Income per annum (in USD)</label>
-                                            <input class="form-control" name="income" step="1" type="number" min="0" max="2147483646" value="<%=df.format(member.getIncome())%>">
+                                            <input class="form-control" name="income" step="1" type="number" value="<%=df.format(member.getIncome())%>">
                                         </div>
                                         <div class="form-group">
                                             <input type="checkbox" name="serviceLevelAgreement"> Allow us to use your particulars to serve you better?<br/>Checking the box above indicates that you agree to our <a onclick="pdpaWindow()">personal data protection policy.</a>
@@ -177,6 +176,31 @@
     <!-- Current Page JS -->
     <script src="../../vendor/formhelpers/bootstrap-formhelpers-countries.js"></script>
     <script src="../../vendor/formhelpers/bootstrap-formhelpers.min.js"></script>
+    <script>
+    $('#form').validate({
+        rules: {
+            name: "required",
+            phone: {
+                required: true,
+                digits: true,
+                rangelength: [8, 8]
+            },
+            address: "required",
+            securityAnswer: "required",
+            age: {
+                required: true,
+                digits: true,
+                range: [1, 150],
+                step: 1
+            },
+            income: {
+                digits: true,
+                range: [0, 2147483646],
+                step: 1
+            }
+        }
+    });
+    </script>
     <jsp:include page="footer.html" />
 </body>
 </html>
