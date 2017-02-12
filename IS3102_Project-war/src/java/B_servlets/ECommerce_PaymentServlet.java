@@ -90,7 +90,6 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             params.put("description", "SEP CA5 - Charge");
             params.put("source", token);
 
-
             RequestOptions options = RequestOptions
                     .builder()
                     .setIdempotencyKey(token)
@@ -127,18 +126,17 @@ public class ECommerce_PaymentServlet extends HttpServlet {
                     if (lineres.getStatus() == 201) {
 
                         result = "Thank you for shopping at Island Furniture. You have checkout successfully!";
-                        shoppingcart.clear();
-                        session.setAttribute("shoppingCart", shoppingcart);
-                        response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
 
                     }
                 }
+                shoppingcart.clear();
+                session.setAttribute("shoppingCart", shoppingcart);
+                response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
             } else {
                 result = "Error. Transaction was not approved. Please try again later";
                 response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
 
             }
-            
 
         } catch (CardException e) {
             // Since it's a decline, CardException will be caught
