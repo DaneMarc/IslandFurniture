@@ -19,39 +19,41 @@ import javax.ws.rs.core.Response;
 
 @WebServlet(name = "ECommerce_MemberEditProfileServlet", urlPatterns = {"/ECommerce_MemberEditProfileServlet"})
 public class ECommerce_MemberEditProfileServlet extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()){
-        Client client = ClientBuilder.newClient();
-        HttpSession session = request.getSession();
-        Member member = new Member();
-        
-        member.setName(request.getParameter("name"));
-        member.setEmail(request.getParameter("email"));
-        member.setPhone(request.getParameter("phone"));
-        member.setAddress(request.getParameter("address"));
-        member.setCity(request.getParameter("city"));
-        member.setSecurityQuestion(Integer.parseInt(request.getParameter("securityQuestion")));
-        member.setSecurityAnswer(request.getParameter("securityAnswer"));
-        member.setAge(Integer.parseInt(request.getParameter("age")));
-        member.setIncome(Integer.parseInt(request.getParameter("income")));
-        
-        WebTarget target = client
-                .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity")
-                .path("editMember")
-                .queryParam("email", request.getParameter("email"))
-                .queryParam("password", request.getParameter("password"));
-                
-        Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-        Response res = invocationBuilder.put(Entity.entity(member, MediaType.APPLICATION_JSON));
-        Member newMember = (Member)res.readEntity(Member.class);
-        String memberEmail = newMember.getEmail();
-        session.setAttribute("memberEmail", memberEmail);
-        
-        response.sendRedirect("ECommerce_GetMember");
-    }
+        try (PrintWriter out = response.getWriter()) {
+            Client client = ClientBuilder.newClient();
+            HttpSession session = request.getSession();
+            Member member = new Member();
+
+            member.setName(request.getParameter("name"));
+            member.setEmail(request.getParameter("email"));
+            member.setPhone(request.getParameter("phone"));
+            member.setAddress(request.getParameter("address"));
+            member.setCity(request.getParameter("city"));
+            member.setSecurityQuestion(Integer.parseInt(request.getParameter("securityQuestion")));
+            member.setSecurityAnswer(request.getParameter("securityAnswer"));
+            member.setAge(Integer.parseInt(request.getParameter("age")));
+            member.setIncome(Integer.parseInt(request.getParameter("income")));
+
+            WebTarget target = client
+                    .target("http://localhost:8080/WebServices-Student/webresources/entity.memberentity")
+                    .path("editMember")
+                    .queryParam("email", request.getParameter("email"))
+                    .queryParam("password", request.getParameter("password"));
+
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response res = invocationBuilder.put(Entity.entity(member, MediaType.APPLICATION_JSON));
+            Member newMember = (Member) res.readEntity(Member.class);
+            String memberEmail = newMember.getEmail();
+            session.setAttribute("member", member);
+            session.setAttribute("memberEmail", memberEmail);
+
+            response.sendRedirect("ECommerce_GetMember");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
