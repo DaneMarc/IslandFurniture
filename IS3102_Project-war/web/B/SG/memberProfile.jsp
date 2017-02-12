@@ -27,8 +27,10 @@
                         }
                     }
                 } else {
+                    $('#form').append($('<input type="hidden" name="city">').val(document.getElementById('country').value))
                     return ok;
                 }
+                $('#form').append($('<input type="hidden" name="city">').val(document.getElementById('country').value))
                 return ok;
             }
 
@@ -89,13 +91,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Country</label>
-                                            <%if (member.getCity() != null && member.getCity() != "") {%>
-                                            <select name="country" class="bfh-countries">
-                                                <option value="<%=member.getCity()%>"><%=member.getCity()%></option>
-                                                <%} else {%>
-                                                <select name="country" class="bfh-countries" data-country="SG">
-                                                    <%}%>
-                                                </select>
+                                            <%if(member.getCity() != null && member.getCity() != ""){%>
+                                            <select id="country" class="bfh-countries" data-flags="true" data-country="<%=member.getCity()%>">
+                                            <%}else{%>
+                                            <select id="country" class="bfh-countries" data-flags="true">
+                                            <%}%>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Address</label>
@@ -174,7 +175,7 @@
     
     <!-- Current Page JS -->
     <script src="../../vendor/formhelpers/bootstrap-formhelpers-countries.js"></script>
-    <script src="../../vendor/formhelpers/bootstrap-formhelpers.min.js"></script>
+    <script src="../../vendor/formhelpers/bootstrap-formhelpers.js"></script>
     <script>
     $('#form').validate({
         rules: {
