@@ -164,6 +164,7 @@
                     </div>
                 </div>
                 <%
+                        session.removeAttribute("member");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         response.sendRedirect("index.jsp");
