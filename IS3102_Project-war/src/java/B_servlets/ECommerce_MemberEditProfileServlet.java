@@ -49,7 +49,7 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
             Response res = invocationBuilder.put(Entity.entity(member, MediaType.APPLICATION_JSON));
             Member newMember = (Member) res.readEntity(Member.class);
             String memberEmail = newMember.getEmail();
-            session.setAttribute("member", member);
+            session.setAttribute("updated", true);
             session.setAttribute("memberEmail", memberEmail);
 
             response.sendRedirect("ECommerce_GetMember");

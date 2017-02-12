@@ -52,14 +52,12 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
 
             if (contains) {
                 if (shoppingCart.get(itemId).getQuantity() < itemQty){
-                    System.out.println("here1");
                     shoppingCart.get(itemId).setQuantity(shoppingCart.get(itemId).getQuantity() + 1);
                     session.setAttribute("shoppingCart", shoppingCart);
                     result = "Item successfully added into the cart!";
                     response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
                 }
                 else {
-                    System.out.println("here2");
                     result = "Item not added to cart, not enough quantity available";
                     response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
                 }
