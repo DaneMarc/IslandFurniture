@@ -40,23 +40,21 @@ public class ECommerce_GetMember extends HttpServlet {
 
             if (res.getStatus() == 200) {
                 if (session.getAttribute("memberName") != null) {
-                    if (!(session.getAttribute("memberName").equals(member.getName()))) {
+                    if (session.getAttribute("member") != null) {
                         session.setAttribute("member", member);
                         session.removeAttribute("memberName");
                         session.setAttribute("memberName", member.getName());
                         String resultString = "Account updated successfully";
                         response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp?goodMsg=" + resultString);
-                    } else{
+                    } else {
                         session.setAttribute("member", member);
                         response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
                     }
+                } else {
+                    session.setAttribute("memberName", member.getName());
+                    response.sendRedirect("/IS3102_Project-war/B/SG/index.jsp");
 
-                }else {
-                        session.setAttribute("member", member);
-                        session.setAttribute("memberName", member.getName());
-                        response.sendRedirect("/IS3102_Project-war/B/SG/index.jsp");
-
-                    }
+                }
             }
         }
     }
