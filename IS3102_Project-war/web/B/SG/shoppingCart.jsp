@@ -329,7 +329,7 @@
             <script src="../../vendor/circle-flip-slideshow/js/jquery.flipshow.js"></script>
             <script src="../../js/views/view.home.js"></script>
             <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-            <script>Stripe.setPublishableKey('pk_test_lDBR5zoHiQg5voO1WjiXzWVA');</script>
+            <script>Stripe.setPublishableKey('pk_test_7TuGaSCavPFbVutlDa9m60Vi');</script>
             <script>
             function validateCreditCard(){
                 Stripe.card.createToken({
