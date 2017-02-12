@@ -11,14 +11,18 @@ package HelperClasses;
  */
 public class SaleRecord {
     public SaleRecord(){}
-    public SaleRecord(long m, double ap, long cid){
+    public SaleRecord(long m, double ap, long cid, String c, long si){
         memberId = m;
         amountPaid = ap;
         countryId = cid;
+        currency = c;
+        storeId = si;
     }
     private long memberId;
     private double amountPaid;
     private long countryId;
+    private String currency;
+    private long storeId;
     
     public long getMemberId(){
     return memberId;
@@ -29,6 +33,12 @@ public class SaleRecord {
     public long getCountryId(){
         return countryId;
     }
+    public String getCurrency(){
+        return currency;
+    }
+    public long getStoreId(){
+        return storeId;
+    }
     public void setMemberId(long m){
         memberId = m;
     }
@@ -37,6 +47,12 @@ public class SaleRecord {
     }
     public void setCountryId(long cid){
         countryId = cid;
+    }
+    public void setCurrency(String c){
+        currency = c;
+    }
+    public void setStoreId(long si){
+        storeId = si;
     }
 
  

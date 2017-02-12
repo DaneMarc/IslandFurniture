@@ -5,13 +5,25 @@
  */
 package B_servlets;
 
+import HelperClasses.Currency_Storeid;
 import HelperClasses.LineItem;
 import HelperClasses.Member;
 import HelperClasses.SaleRecord;
 import HelperClasses.ShoppingCartLineItem;
+import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.RateLimitException;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
+import com.stripe.net.RequestOptions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,12 +64,42 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             member = (Member) session.getAttribute("member");
             ArrayList<ShoppingCartLineItem> shoppingcart = (ArrayList<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
             long mid = member.getId();
-            double paid = 10.0;
+            double paid = Double.parseDouble(request.getParameter("finalPrice"));
             long cid = Long.parseLong(session.getAttribute("countryID").toString());
 
+            Client csClient = ClientBuilder.newClient();
+            WebTarget csTarget = csClient
+                    .target("http://localhost:8080/WebServices-Student/webresources/commerce")
+                    .path("getCurrencyAndStoreId")
+                    .queryParam("countryId", cid);
+            Invocation.Builder csIb = csTarget.request(MediaType.APPLICATION_JSON);
+            Response csRes = csIb.get();
+            Currency_Storeid csid = csRes.readEntity(Currency_Storeid.class);
+
+            //--------------------------Credit card charge-----------------
+//            Stripe.apiKey = "pk_test_lDBR5zoHiQg5voO1WjiXzWVA";
+//
+//            String token = request.getParameter("stripeToken");
+//
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("amount", 1000);
+//            params.put("currency", csid.getCurrency());
+//            params.put("description", "Stripe DEMO - SEP CA5");
+//            params.put("source", token);
+//
+//            RequestOptions options = RequestOptions
+//                    .builder()
+//                    .setIdempotencyKey(token)
+//                    .build();
+//
+//            Charge charge = Charge.create(params, options);
+//            if(charge.getPaid()){
+//                out.println("Charge Successful!");
+//            }
+            //------------End of Charging--------------
 
 
-            SaleRecord sr = new SaleRecord(mid, paid, cid);
+            SaleRecord sr = new SaleRecord(mid, paid, cid, csid.getCurrency(), csid.getSaleRecordId());
             Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/WebServices-Student/webresources/commerce")
@@ -67,8 +109,10 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             Response res = invocationBuilder.put(Entity.entity(sr, MediaType.APPLICATION_JSON));
 
             String output = res.readEntity(String.class);
+
             long saleid = Long.parseLong(output);
 
+            String result = "";
             for (ShoppingCartLineItem sc : shoppingcart) {
                 LineItem li = new LineItem(saleid, sc.getId(), sc.getQuantity(), sc.getCountryID(), sc.getSKU());
                 Client lineclient = ClientBuilder.newClient();
@@ -78,17 +122,49 @@ public class ECommerce_PaymentServlet extends HttpServlet {
 
                 Invocation.Builder ib = linetarget.request(MediaType.APPLICATION_JSON);
                 Response lineres = ib.put(Entity.entity(li, MediaType.APPLICATION_JSON));
-                String result = "";
+
                 if (lineres.getStatus() == 201) {
 
-                    result = "Item successfully added into the cart!";
-                    response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
+                    result = "Thank you for shopping at Island Furniture. You have checkout successfully!";
+
                 } else {
+                    result = "Error. Transaction was not approved. Please try again later";
 
                 }
             }
+            shoppingcart.clear();
+            session.setAttribute("shoppingCart", shoppingcart);
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
 
+        }catch (Exception e) {
+            // Something else happened, completely unrelated to Stripe
+            System.out.println("Unexpected error occured!");
         }
+//        catch (CardException e) {
+//            // Since it's a decline, CardException will be caught
+//            System.out.println("Status is: " + e.getCode());
+//            System.out.println("Message is: " + e.getMessage());
+//        } catch (RateLimitException e) {
+//            // Too many requests made to the API too quickly
+//            System.out.println("Too many payment request is made at once.");
+//        } catch (InvalidRequestException e) {
+//            // Invalid parameters were supplied to Stripe's API
+//            System.out.println("Invalid Stripe Parameters.");
+//        } catch (AuthenticationException e) {
+//            // Authentication with Stripe's API failed
+//            // (maybe you changed API keys recently)
+//            System.out.println("API Authentication Error.");
+//        } catch (APIConnectionException e) {
+//            // Network communication with Stripe failed
+//            System.out.println("Network communication with Stripe failed.");
+//        } catch (StripeException e) {
+//            // Display a very generic error to the user, and maybe send
+//            // yourself an email
+//            System.out.println("We encountered difficulties processing your request. \nPlease try again.");
+//        } catch (Exception e) {
+//            // Something else happened, completely unrelated to Stripe
+//            System.out.println("Unexpected error occured!");
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
