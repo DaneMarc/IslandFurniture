@@ -29,7 +29,6 @@
         <%
             List<StoreEntity> storesInCountry = (List<StoreEntity>) session.getAttribute("storesInCountry");
             List<Furniture> furnitures = (List<Furniture>) (session.getAttribute("furnitures"));
-            //String categoryURL = (String) URLEncoder.encode(session.getAttribute("category").toString());
             String name = "", imageURL = "", description = "", type = "", category = "";
             Integer length = 0, width = 0, height = 0;
             Double price = null;
